@@ -19,12 +19,16 @@ from django.urls import path,include
 from stuff.views import (
     TopicCategoryModelViewSet,
     TopicModelViewSet,
+    QuestionModelViewSet,
+    AskModelViewSet,
 )
 
 router = DefaultRouter()
 
 router.register('categories',TopicCategoryModelViewSet)
 router.register('topics', TopicModelViewSet)
+router.register('questions', QuestionModelViewSet)
+router.register('ask',AskModelViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
