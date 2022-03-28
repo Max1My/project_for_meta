@@ -1,5 +1,5 @@
 from rest_framework.serializers import ModelSerializer
-from .models import TopicCategory,Topic,Question,Ask
+from .models import TopicCategory,Topic,Question,Ask, Result
 
 
 class TopicCategoryModelSerializer(ModelSerializer):
@@ -20,4 +20,9 @@ class QuestionModelSerializer(ModelSerializer):
 class AskModelSerializer(ModelSerializer):
     class Meta:
         model = Ask
+        fields = '__all__'
+
+class ResultModelSerializer(ModelSerializer):
+    class Meta:
+        model = Result
         fields = '__all__'

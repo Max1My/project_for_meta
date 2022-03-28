@@ -3,14 +3,22 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import TopicCategoryModelViewSet,TopicModelViewSet,QuestionModelViewSet
 
-router = DefaultRouter()
-router.register('categories',TopicCategoryModelViewSet)
-router.register('topics/',TopicModelViewSet)
-router.register('questions/', QuestionModelViewSet)
+from .views import (
+    TopicCategoryModelViewSet,
+    TopicModelViewSet,
+    QuestionModelViewSet,
+    AskModelViewSet,
+    ResultModelViewSet,
+)
 
-app_name = 'authapp'
+router = DefaultRouter()
+
+router.register('categories',TopicCategoryModelViewSet)
+router.register('topics', TopicModelViewSet)
+router.register('questions', QuestionModelViewSet)
+router.register('ask',AskModelViewSet)
+router.register('result/<int:pk>/', ResultModelViewSet.as_view({'get': 'retrieve'}))
+
 urlpatterns = [
-    path('categories/',TopicCategoryModelViewSet.as_view()),
-    path('topics/',TopicModelViewSet.as_view()),
-    path('question/',QuestionModelViewSet.as_view())
-]
+    path('api/', include(router.urls)),
+    ]

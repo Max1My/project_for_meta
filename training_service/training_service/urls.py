@@ -16,23 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from rest_framework.routers import DefaultRouter
 from django.urls import path,include
-from stuff.views import (
-    TopicCategoryModelViewSet,
-    TopicModelViewSet,
-    QuestionModelViewSet,
-    AskModelViewSet,
-)
 
-router = DefaultRouter()
-
-router.register('categories',TopicCategoryModelViewSet)
-router.register('topics', TopicModelViewSet)
-router.register('questions', QuestionModelViewSet)
-router.register('ask',AskModelViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
-    path('api/', include(router.urls)),
+    path('api/', include('stuff.urls',namespace='stuff')),
     path('api/', include('authapp.urls',namespace='authapp')),
 ]

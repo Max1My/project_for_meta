@@ -1,19 +1,23 @@
-from rest_framework.viewsets import ModelViewSet
+from rest_framework import viewsets
 from rest_framework.views import Response
-from .models import TopicCategory,Topic,Question,Ask
+from .models import TopicCategory,Topic,Question,Ask,Result
 from .serializers import (
     TopicCategoryModelSerializer,
     TopicModelSerializer,
     QuestionModelSerializer,
     AskModelSerializer,
+    ResultModelSerializer
 )
 
+from django.shortcuts import get_object_or_404
+from authapp.models import User
 
-class TopicCategoryModelViewSet(ModelViewSet):
+
+class TopicCategoryModelViewSet(viewsets.ModelViewSet):
     queryset = TopicCategory.objects.all()
     serializer_class = TopicCategoryModelSerializer
 
-class TopicModelViewSet(ModelViewSet):
+class TopicModelViewSet(viewsets.ModelViewSet):
     queryset = Topic.objects.all()
     serializer_class = TopicModelSerializer
 
@@ -22,7 +26,7 @@ class TopicModelViewSet(ModelViewSet):
         serializer = TopicModelSerializer(topic, many=True)
         return Response(serializer.data)
 
-class QuestionModelViewSet(ModelViewSet):
+class QuestionModelViewSet(viewsets.ModelViewSet):
     queryset = Question.objects.all()
     serializer_class = QuestionModelSerializer
 
@@ -31,11 +35,23 @@ class QuestionModelViewSet(ModelViewSet):
         serializer = QuestionModelSerializer(question,many=True)
         return Response(serializer.data)
 
-class AskModelViewSet(ModelViewSet):
+class AskModelViewSet(viewsets.ModelViewSet):
     queryset = Ask.objects.all()
     serializer_class = AskModelSerializer
 
     def get(self,request,pk=None):
         ask = Ask.objects.filter(id=pk)
         serializer = AskModelSerializer(ask,many=True)
+        return Response(serializer.data)
+
+class ResultModelViewSet(viewsets.ReadOnlyModelViewSet):
+    def list(self,request):
+        queryset = Result.objects.all()
+        serializer = ResultModelSerializer(queryset,many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, pk=None):
+        queryset = Result.objects.filter(user=request.user)
+        result = get_object_or_404(queryset,pk=pk)
+        serializer = ResultModelSerializer(result)
         return Response(serializer.data)
